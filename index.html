@@ -16,7 +16,7 @@
 :root[data-theme="dark"]{--bg:#12161c;--card:#1b212a;--tx:#e8ecf1;--mu:#97a2b0;--bd:#303946;--ac:#6c9bff;--acs:#22304d;--we:#161b22}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.35 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding-bottom:calc(150px + env(safe-area-inset-bottom,0px))}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.35 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding-bottom:calc(180px + env(safe-area-inset-bottom,0px))}
 button,input{font:inherit;color:var(--tx)}
 header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--bd)}
 header button{width:44px;height:44px;border-radius:12px;border:1px solid var(--bd);background:var(--card);font-size:20px}
@@ -33,6 +33,7 @@ header small{display:block;font-weight:400;color:var(--mu);font-size:12px;text-t
 .bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--bd);padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));z-index:6}
 .tot{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
 .tot b{font-size:22px}
+.est{font-size:13px;color:var(--mu);margin:-4px 0 8px}.est b{color:var(--tx)}
 .btns{display:flex;gap:8px}
 .btns button{flex:1;height:46px;border-radius:12px;border:1px solid var(--bd);background:var(--card);font-weight:600}
 .btns .p{background:var(--ac);border-color:var(--ac);color:#fff}
@@ -67,6 +68,7 @@ textarea{width:100%;height:160px;background:var(--bg);color:var(--tx);border:1px
 
 <div class="bar">
   <div class="tot"><span>Total du mois</span><b id="tot">0 h</b></div>
+  <div class="est" id="est"></div>
   <div class="btns"><button class="p" id="pdfb">PDF</button><button id="more">Plus…</button></div>
 </div>
 
@@ -82,6 +84,9 @@ const $=i=>document.getElementById(i);
 const num=s=>{const n=parseFloat(String(s).replace(",",".").replace(/[^0-9.]/g,""));return isNaN(n)?0:n};
 const fmt=n=>(Math.round(n*100)/100).toString().replace(".",",");
 let y,m,data={},cur=1;
+let RT={mid:13.76,oth:13.22,ch:19.67};
+try{const r=JSON.parse(localStorage.getItem("vacations:rates")||"null");if(r&&r.mid>0)RT=Object.assign(RT,r)}catch(e){}
+const eur=n=>n.toLocaleString("fr-FR",{style:"currency",currency:"EUR"});
 const key=()=>y+"-"+String(m).padStart(2,"0");
 const dim=()=>new Date(y,m,0).getDate();
 const dow=d=>new Date(y,m-1,d).getDay();
@@ -97,6 +102,9 @@ function render(){
     h+=`<button class="day${w%6==0?" we":""}${isT&&t.getDate()==d?" today":""}" data-d="${d}"><div class="dn">${String(d).padStart(2,"0")}<small>${JS[w]}</small></div><div class="ch">${chips}</div><div class="dt">${tt?fmt(tt):""}</div></button>`;
   }
   $("list").innerHTML=h;$("tot").textContent=fmt(s)+" h";
+  const mid=Object.keys(data).reduce((a,d)=>a+num((data[d]||{})[1]),0),oth=s-mid;
+  const g=mid*RT.mid+oth*RT.oth,nt=g*(1-RT.ch/100);
+  $("est").innerHTML=s?`Net estimé <b>≈ ${eur(nt)}</b> · brut ${eur(g)}`:"Net estimé : saisis des heures";
 }
 function setMonth(ny,nm){y=ny;m=nm;if(m<1){m=12;y--}if(m>12){m=1;y++}load();render();window.scrollTo(0,0)}
 $("pm").onclick=()=>setMonth(y,m-1);$("nm").onclick=()=>setMonth(y,m+1);
@@ -105,7 +113,7 @@ function syncSel(){
   sel.forEach(x=>[...x.options].forEach(o=>{o.disabled=o.value!==""&&o.value!==x.value&&used.includes(o.value)}));
 }
 function openDay(d){
-  cur=d;const dd=data[d]||{},ent=Object.keys(dd).map(Number).sort((a,b)=>a-b),n=Math.max(3,ent.length);
+  cur=d;const dd=data[d]||{},ent=Object.keys(dd).map(Number).sort((a,b)=>a-b),n=Math.max(4,ent.length);
   let h=`<div class="ph"><button id="pd">‹</button><b>${JS[dow(d)]} ${d} ${new Date(y,m-1,1).toLocaleDateString("fr-FR",{month:"long"})}</b><button id="nd">›</button></div>
   <div class="rh"><span>Période</span><span>Nombre d'heures</span></div>`;
   for(let k=0;k<n;k++){
@@ -113,7 +121,7 @@ function openDay(d){
     h+=`<div class="rw"><select class="ps"><option value="">Choisir…</option>${P.map((q,i)=>`<option value="${i}"${p===i?" selected":""}>${q}</option>`).join("")}</select><input class="hv" list="hl" inputmode="decimal" placeholder="Heures" value="${v}"></div>`;
   }
   h+=`<datalist id="hl">${Array.from({length:19},(_,i)=>`<option value="${fmt(1+i*0.5)}">`).join("")}</datalist>
-  <p class="note">3 périodes maximum par jour. Choisis une durée dans la liste (1 à 10 h) ou tape ta propre valeur. Pour retirer une période, remets « Choisir… ».</p>
+  <p class="note">4 périodes maximum par jour. Choisis une durée dans la liste (1 à 10 h) ou tape ta propre valeur. Pour retirer une période, remets « Choisir… ».</p>
   <button class="ok" id="ok">Enregistrer</button>`;
   $("pn").innerHTML=h;syncSel();$("sh").classList.add("on");
 }
@@ -204,7 +212,7 @@ $("pdfb").onclick=()=>{
 
 $("more").onclick=()=>{
   $("pn2").innerHTML=`<div class="ph"><b>Plus d'options</b><button id="c2">✕</button></div>
-  <div class="btns" style="flex-direction:column"><button id="b2">Sauvegarder mes données (fichier)</button><button id="b3">Restaurer une sauvegarde</button><button id="b4">Vider ce mois</button></div>
+  <div class="btns" style="flex-direction:column"><button id="b7">Réglages du salaire (taux)</button><button id="b2">Sauvegarder mes données (fichier)</button><button id="b3">Restaurer une sauvegarde</button><button id="b4">Vider ce mois</button></div>
   <input type="file" id="fi" accept=".json,application/json" hidden><p class="note">Les données restent sur ce téléphone, dans ce navigateur. Fais une sauvegarde de temps en temps.</p>`;
   $("sh2").classList.add("on");
 };
@@ -216,6 +224,9 @@ $("sh2").onclick=e=>{
     dlBin("etat-de-vacations-"+key()+".pdf",b)}
   if(id=="b2"){$("sh2").classList.remove("on");dl("sauvegarde-heures.json",JSON.stringify(allData()))}
   if(id=="b3")$("fi").click();
+  if(id=="b7")openRates();
+  if(id=="sv"){const a=num($("r1").value),b=num($("r2").value),c=num($("r3").value);
+    if(a>0&&b>0&&c<100){RT={mid:a,oth:b,ch:c};try{localStorage.setItem("vacations:rates",JSON.stringify(RT))}catch(x){}render();$("sh2").classList.remove("on")}else alert("Valeurs invalides.")}
   if(id=="b4"&&confirm("Effacer toutes les heures de ce mois ?")){data={};save();render();$("sh2").classList.remove("on")}
 };
 $("sh2").addEventListener("change",e=>{

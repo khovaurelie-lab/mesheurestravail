@@ -1,4 +1,4 @@
-const V="heures-v1";
+const V="heures-v2";
 const PRE=["./","./index.html","./manifest.webmanifest","./icon-192.png","./icon-512.png","./icon-maskable-512.png"];
 const PDFLIB="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
 self.addEventListener("install",e=>{

@@ -3,30 +3,38 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Mes heures</title>
+<title>Mes Heures / Noisiel</title>
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#2456c8">
+<meta name="theme-color" content="#3f8a14">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <style>
-:root{--bg:#f4f5f8;--card:#fff;--tx:#1a2230;--mu:#6c7685;--bd:#dde1e8;--ac:#2456c8;--acs:#e6eeff;--we:#eceef2;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12161c;--card:#1b212a;--tx:#e8ecf1;--mu:#97a2b0;--bd:#303946;--ac:#6c9bff;--acs:#22304d;--we:#161b22}}
-:root[data-theme="dark"]{--bg:#12161c;--card:#1b212a;--tx:#e8ecf1;--mu:#97a2b0;--bd:#303946;--ac:#6c9bff;--acs:#22304d;--we:#161b22}
+:root{--bg:#f5f8f2;--card:#fff;--tx:#1e2a18;--mu:#667360;--bd:#d6e2cc;--ac:#3f8a14;--acs:#e3f1d6;--we:#ecf1e7;--pb:#3f8a14;--pt:#fff;--hd:#3f8a14;--vac:#fff3bf;--vacb:#e2c85a;--fer:#fde2e0;--ferb:#e39a95;--ferx:#b3261e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#11160e;--card:#1a2116;--tx:#e8efe3;--mu:#9aa793;--bd:#2e3a28;--ac:#86cf55;--acs:#27381d;--we:#151b12;--pb:#5cac24;--pt:#0d1706;--hd:#1f3a12;--vac:#3b3412;--vacb:#7d6c22;--fer:#3f1c1b;--ferb:#8c3d39;--ferx:#ff9d96}}
+:root[data-theme="dark"]{--bg:#11160e;--card:#1a2116;--tx:#e8efe3;--mu:#9aa793;--bd:#2e3a28;--ac:#86cf55;--acs:#27381d;--we:#151b12;--pb:#5cac24;--pt:#0d1706;--hd:#1f3a12;--vac:#3b3412;--vacb:#7d6c22;--fer:#3f1c1b;--ferb:#8c3d39;--ferx:#ff9d96}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.35 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding-bottom:calc(180px + env(safe-area-inset-bottom,0px))}
 button,input{font:inherit;color:var(--tx)}
-header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--bd)}
-header button{width:44px;height:44px;border-radius:12px;border:1px solid var(--bd);background:var(--card);font-size:20px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--hd);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:10px 12px}
+header button{width:44px;height:44px;border-radius:12px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.14);color:#fff;font-size:20px}
 header div{text-align:center;font-weight:700;font-size:18px;text-transform:capitalize}
-header small{display:block;font-weight:400;color:var(--mu);font-size:12px;text-transform:none}
+header small{display:block;font-weight:400;color:rgba(255,255,255,.85);font-size:12px;text-transform:none}
 .list{padding:10px 12px;display:flex;flex-direction:column;gap:6px}
 .day{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px 12px;min-height:54px;width:100%;text-align:left}
 .day.we{background:var(--we)}
+.day.va{background:var(--vac);border-color:var(--vacb)}
+.day.fe{background:var(--fer);border-color:var(--ferb)}
+.day.blk{cursor:default}.day.fe .dn{color:var(--ferx)}
+.ch span.fr{background:none;color:var(--ferx);padding:0;font-size:13px;font-weight:700}
+.ch span.tg{background:none;color:var(--mu);padding:0;font-weight:500}
+.lg{display:flex;flex-wrap:wrap;gap:4px 12px;padding:8px 14px 0;font-size:12px;color:var(--mu)}
+.lg i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-2px;border:1px solid var(--bd)}
+.lg i.fe{background:var(--fer);border-color:var(--ferb)}.lg i.va{background:var(--vac);border-color:var(--vacb)}.lg i.we{background:var(--we)}
 .day.today{border-color:var(--ac);box-shadow:0 0 0 1px var(--ac)}
-.dn{width:44px;font-weight:700}.dn small{display:block;font-weight:400;color:var(--mu);font-size:11px}
+.dn{width:84px;font-weight:700}.dn small{display:block;font-weight:600;color:var(--mu);font-size:10.5px;letter-spacing:.03em}
 .ch{flex:1;display:flex;flex-wrap:wrap;gap:4px}
 .ch span{background:var(--acs);color:var(--ac);border-radius:6px;padding:2px 7px;font-size:12px;font-weight:600}
 .dt{font-weight:700;min-width:48px;text-align:right}
@@ -36,12 +44,12 @@ header small{display:block;font-weight:400;color:var(--mu);font-size:12px;text-t
 .est{font-size:13px;color:var(--mu);margin:-4px 0 8px}.est b{color:var(--tx)}
 .btns{display:flex;gap:8px}
 .btns button{flex:1;height:46px;border-radius:12px;border:1px solid var(--bd);background:var(--card);font-weight:600}
-.btns .p{background:var(--ac);border-color:var(--ac);color:#fff}
+.btns .p{background:var(--pb);border-color:var(--pb);color:var(--pt)}
 .sheet{position:fixed;inset:0;z-index:10;background:rgba(0,0,0,.45);display:none;align-items:flex-end}
 .sheet.on{display:flex}
 .pn{background:var(--card);width:100%;max-height:92%;overflow:auto;border-radius:18px 18px 0 0;padding:14px 14px calc(16px + env(safe-area-inset-bottom,0px))}
 .ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.ph b{font-size:18px;text-transform:capitalize}
+.ph b{font-size:16px}
 .ph button{width:44px;height:44px;border-radius:12px;border:1px solid var(--bd);background:var(--bg);font-size:18px}
 .pr{display:grid;grid-template-columns:90px 1fr;gap:8px;align-items:center;margin-bottom:10px}
 .pr label{font-weight:600}
@@ -53,7 +61,7 @@ header small{display:block;font-weight:400;color:var(--mu);font-size:12px;text-t
 .rw{margin-bottom:10px}
 .rw select,.rw input{width:100%;height:50px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);padding:0 12px;font-size:17px;color:var(--tx)}
 .rw input{text-align:center}
-.ok{width:100%;height:50px;border-radius:12px;border:0;background:var(--ac);color:#fff;font-weight:700;margin-top:4px}
+.ok{width:100%;height:50px;border-radius:12px;border:0;background:var(--pb);color:var(--pt);font-weight:700;margin-top:4px}
 textarea{width:100%;height:160px;background:var(--bg);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:8px;font:12px monospace}
 .note{color:var(--mu);font-size:12px;margin:6px 0 0}
 </style>
@@ -61,9 +69,10 @@ textarea{width:100%;height:160px;background:var(--bg);color:var(--tx);border:1px
 <body>
 <header>
   <button id="pm" aria-label="Mois précédent">‹</button>
-  <div><span id="mt"></span><small>Activités périscolaires</small></div>
+  <div><span id="mt"></span><small>Mes Heures / Noisiel</small></div>
   <button id="nm" aria-label="Mois suivant">›</button>
 </header>
+<div class="lg" id="lg"></div>
 <div class="list" id="list"></div>
 
 <div class="bar">
@@ -80,6 +89,21 @@ textarea{width:100%;height:160px;background:var(--bg);color:var(--tx);border:1px
 const P=["Matin","Midi","Soir","Mercredi","Vacances","Réunion"];
 const PRE=[["1,50","2","2,50"],["1,50","2","2,50"],["2","2,50","3"],["1","1,50","10"],["10"],["1,50","2"]];
 const JS=["dim","lun","mar","mer","jeu","ven","sam"];
+const JN=["DIMANCHE","LUNDI","MARDI","MERCREDI","JEUDI","VENDREDI","SAMEDI"];
+const DEF=["1,5","2","2,5","10","10",""];
+const VAC=[["2025-07-05","2025-08-31"],["2025-10-18","2025-11-02"],["2025-12-20","2026-01-04"],["2026-02-21","2026-03-08"],["2026-04-18","2026-05-03"],["2026-07-04","2026-08-31"],["2026-10-17","2026-11-01"],["2026-12-19","2027-01-03"],["2027-02-06","2027-02-21"],["2027-04-03","2027-04-18"],["2027-07-03","2027-09-01"]];
+const z2=x=>String(x).padStart(2,"0");
+const isVac=(yy,mm,dd)=>{const k=yy+"-"+z2(mm)+"-"+z2(dd);return VAC.some(r=>k>=r[0]&&k<=r[1])};
+const HC={};
+function hols(yy){
+  if(HC[yy])return HC[yy];
+  const a=yy%19,b=Math.floor(yy/100),c=yy%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,mm=Math.floor((a+11*h+22*l)/451),mo=Math.floor((h+l-7*mm+114)/31),da=((h+l-7*mm+114)%31)+1;
+  const o={"1-1":"Jour de l'An","5-1":"Fête du Travail","5-8":"Victoire 1945","7-14":"Fête nationale","8-15":"Assomption","11-1":"Toussaint","11-11":"Armistice 1918","12-25":"Noël"};
+  [["Lundi de Pâques",1],["Ascension",39],["Lundi de Pentecôte",50]].forEach(([n,j])=>{const t=new Date(yy,mo-1,da+j);o[(t.getMonth()+1)+"-"+t.getDate()]=n});
+  return HC[yy]=o;
+}
+const holName=(yy,mm,dd)=>hols(yy)[mm+"-"+dd]||"";
+const blocked=d=>{const w=dow(d);return w==0||w==6||!!holName(y,m,d)};
 const $=i=>document.getElementById(i);
 const num=s=>{const n=parseFloat(String(s).replace(",",".").replace(/[^0-9.]/g,""));return isNaN(n)?0:n};
 const fmt=n=>(Math.round(n*100)/100).toString().replace(".",",");
@@ -95,11 +119,16 @@ function load(){try{const r=localStorage.getItem("vacations:"+key());data=r?JSON
 function save(){try{localStorage.setItem("vacations:"+key(),JSON.stringify(data));localStorage.setItem("vacations:last",key())}catch(e){}}
 function render(){
   $("mt").textContent=new Date(y,m-1,1).toLocaleDateString("fr-FR",{month:"long",year:"numeric"});
+  const cov=(y*12+m>=2025*12+7)&&(y*12+m<=2027*12+9);
+  $("lg").innerHTML='<span><i class="fe"></i>Jour férié</span><span><i class="va"></i>Vacances scolaires (zone C)</span><span><i class="we"></i>Week-end</span>'+(cov?"":'<span>· vacances non renseignées pour ce mois</span>');
   const t=new Date(),isT=t.getFullYear()==y&&t.getMonth()+1==m;let h="",s=0;
   for(let d=1;d<=dim();d++){
     const w=dow(d),dd=data[d]||{},tt=total(d);s+=tt;
-    const chips=P.map((p,i)=>dd[i]?`<span>${p.slice(0,3)}. ${dd[i]}</span>`:"").join("");
-    h+=`<button class="day${w%6==0?" we":""}${isT&&t.getDate()==d?" today":""}" data-d="${d}"><div class="dn">${String(d).padStart(2,"0")}<small>${JS[w]}</small></div><div class="ch">${chips}</div><div class="dt">${tt?fmt(tt):""}</div></button>`;
+    const hn=holName(y,m,d),va=isVac(y,m,d),bl=w==0||w==6||!!hn;
+    let chips=P.map((p,i)=>dd[i]?`<span>${p.slice(0,3)}. ${dd[i]}</span>`:"").join("");
+    if(hn)chips=`<span class="fr">Jour férié · ${hn}</span>`+chips;
+    else if(!chips&&va&&!bl)chips='<span class="tg">Vacances scolaires</span>';
+    h+=`<button class="day${w%6==0?" we":""}${va&&w%6!=0?" va":""}${hn?" fe":""}${bl?" blk":""}${isT&&t.getDate()==d?" today":""}" data-d="${d}"><div class="dn">${z2(d)}<small>${JN[w]}</small></div><div class="ch">${chips}</div><div class="dt">${tt?fmt(tt):""}</div></button>`;
   }
   $("list").innerHTML=h;$("tot").textContent=fmt(s)+" h";
   const mid=Object.keys(data).reduce((a,d)=>a+num((data[d]||{})[1]),0),oth=s-mid;
@@ -114,11 +143,11 @@ function syncSel(){
 }
 function openDay(d){
   cur=d;const dd=data[d]||{},ent=Object.keys(dd).map(Number).sort((a,b)=>a-b),n=Math.max(4,ent.length);
-  let h=`<div class="ph"><button id="pd">‹</button><b>${JS[dow(d)]} ${d} ${new Date(y,m-1,1).toLocaleDateString("fr-FR",{month:"long"})}</b><button id="nd">›</button></div>
+  let h=`<div class="ph"><button id="pd">‹</button><b>${JN[dow(d)]} ${d} ${new Date(y,m-1,1).toLocaleDateString("fr-FR",{month:"long"})}</b><button id="nd">›</button></div>
   <div class="rh"><span>Période</span><span>Nombre d'heures</span></div>`;
   for(let k=0;k<n;k++){
     const p=ent[k],v=p!==undefined?dd[p]:"";
-    h+=`<div class="rw"><select class="ps"><option value="">Choisir…</option>${P.map((q,i)=>`<option value="${i}"${p===i?" selected":""}>${q}</option>`).join("")}</select><input class="hv" list="hl" inputmode="decimal" placeholder="Heures" value="${v}"></div>`;
+    h+=`<div class="rw"><select class="ps" data-prev="${p===undefined?"":p}"><option value="">Choisir…</option>${P.map((q,i)=>`<option value="${i}"${p===i?" selected":""}>${q}</option>`).join("")}</select><input class="hv" list="hl" inputmode="decimal" placeholder="Heures" onfocus="this.select()" value="${v}"></div>`;
   }
   h+=`<datalist id="hl">${Array.from({length:19},(_,i)=>`<option value="${fmt(1+i*0.5)}">`).join("")}</datalist>
   <p class="note">4 périodes maximum par jour. Choisis une durée dans la liste (1 à 10 h) ou tape ta propre valeur. Pour retirer une période, remets « Choisir… ».</p>
@@ -131,14 +160,21 @@ function commit(){
     if(p!==""&&num(v)>0)dd[p]=v});
   if(Object.keys(dd).length)data[cur]=dd;else delete data[cur];save();render();
 }
-$("list").onclick=e=>{const b=e.target.closest(".day");if(b)openDay(+b.dataset.d)};
+$("list").onclick=e=>{const b=e.target.closest(".day");if(b&&!b.classList.contains("blk"))openDay(+b.dataset.d)};
+function adj(d,k){for(let x=d+k;x>=1&&x<=dim();x+=k)if(!blocked(x))return x;return 0}
 $("pn").onclick=e=>{
   const b=e.target.closest("button");if(!b)return;
   if(b.id=="ok"){commit();$("sh").classList.remove("on")}
-  if(b.id=="pd"&&cur>1){commit();openDay(cur-1)}
-  if(b.id=="nd"&&cur<dim()){commit();openDay(cur+1)}
+  if(b.id=="pd"){const x=adj(cur,-1);if(x){commit();openDay(x)}}
+  if(b.id=="nd"){const x=adj(cur,1);if(x){commit();openDay(x)}}
 };
-$("pn").addEventListener("change",e=>{if(e.target.classList.contains("ps"))syncSel()});
+$("pn").addEventListener("change",e=>{
+  if(!e.target.classList.contains("ps"))return;
+  const sel=e.target,inp=sel.parentNode.querySelector(".hv"),pv=sel.dataset.prev,old=pv===""||pv===undefined?"":DEF[+pv],cv=inp.value.trim();
+  if(sel.value===""){if(cv===old)inp.value=""}
+  else if(cv===""||cv===old)inp.value=DEF[+sel.value];
+  sel.dataset.prev=sel.value;syncSel();
+});
 $("sh").onclick=e=>{if(e.target.id=="sh"){commit();$("sh").classList.remove("on")}};
 
 function allData(){const o={};try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith("vacations:20"))o[k.slice(10)]=JSON.parse(localStorage.getItem(k))}}catch(e){}return o}

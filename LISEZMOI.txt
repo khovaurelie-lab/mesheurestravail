@@ -1,0 +1,17 @@
+MES HEURES - application autonome
+
+Contenu : index.html, sw.js, manifest.webmanifest et 3 icones.
+Ces fichiers doivent etre mis en ligne (en HTTPS) dans le MEME dossier.
+
+1) GitHub Pages (gratuit)
+   - Creer un depot public sur github.com, y envoyer tous ces fichiers a la racine.
+   - Settings > Pages > Deploy from a branch > main / (root).
+   - Adresse obtenue : https://TON-PSEUDO.github.io/NOM-DU-DEPOT/
+
+2) Installer sur Android
+   - Ouvrir l'adresse dans Chrome > menu (3 points) > "Installer l'application".
+
+3) APK (facultatif)
+   - Aller sur pwabuilder.com, coller l'adresse, "Package for stores" > Android.
+   - Telecharger le paquet, utiliser le fichier .apk (option "test / sideload").
+   - Autoriser l'installation d'applications inconnues sur le telephone.

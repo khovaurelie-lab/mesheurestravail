@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mes heures</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#2456c8">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{--bg:#f4f5f8;--card:#fff;--tx:#1a2230;--mu:#6c7685;--bd:#dde1e8;--ac:#2456c8;--acs:#e6eeff;--we:#eceef2;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12161c;--card:#1b212a;--tx:#e8ecf1;--mu:#97a2b0;--bd:#303946;--ac:#6c9bff;--acs:#22304d;--we:#161b22}}
+:root[data-theme="dark"]{--bg:#12161c;--card:#1b212a;--tx:#e8ecf1;--mu:#97a2b0;--bd:#303946;--ac:#6c9bff;--acs:#22304d;--we:#161b22}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.35 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding-bottom:calc(150px + env(safe-area-inset-bottom,0px))}
+button,input{font:inherit;color:var(--tx)}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--bd)}
+header button{width:44px;height:44px;border-radius:12px;border:1px solid var(--bd);background:var(--card);font-size:20px}
+header div{text-align:center;font-weight:700;font-size:18px;text-transform:capitalize}
+header small{display:block;font-weight:400;color:var(--mu);font-size:12px;text-transform:none}
+.list{padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.day{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px 12px;min-height:54px;width:100%;text-align:left}
+.day.we{background:var(--we)}
+.day.today{border-color:var(--ac);box-shadow:0 0 0 1px var(--ac)}
+.dn{width:44px;font-weight:700}.dn small{display:block;font-weight:400;color:var(--mu);font-size:11px}
+.ch{flex:1;display:flex;flex-wrap:wrap;gap:4px}
+.ch span{background:var(--acs);color:var(--ac);border-radius:6px;padding:2px 7px;font-size:12px;font-weight:600}
+.dt{font-weight:700;min-width:48px;text-align:right}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--bd);padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));z-index:6}
+.tot{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.tot b{font-size:22px}
+.btns{display:flex;gap:8px}
+.btns button{flex:1;height:46px;border-radius:12px;border:1px solid var(--bd);background:var(--card);font-weight:600}
+.btns .p{background:var(--ac);border-color:var(--ac);color:#fff}
+.sheet{position:fixed;inset:0;z-index:10;background:rgba(0,0,0,.45);display:none;align-items:flex-end}
+.sheet.on{display:flex}
+.pn{background:var(--card);width:100%;max-height:92%;overflow:auto;border-radius:18px 18px 0 0;padding:14px 14px calc(16px + env(safe-area-inset-bottom,0px))}
+.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.ph b{font-size:18px;text-transform:capitalize}
+.ph button{width:44px;height:44px;border-radius:12px;border:1px solid var(--bd);background:var(--bg);font-size:18px}
+.pr{display:grid;grid-template-columns:90px 1fr;gap:8px;align-items:center;margin-bottom:10px}
+.pr label{font-weight:600}
+.pr input{width:100%;height:46px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);padding:0 12px;font-size:18px;text-align:center}
+.pr .q{grid-column:2;display:flex;gap:6px;margin-top:-2px}
+.q button{flex:1;height:34px;border-radius:8px;border:1px solid var(--bd);background:var(--bg);font-size:13px}
+.rh,.rw{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rh{color:var(--mu);font-size:12px;margin-bottom:4px;padding-left:2px}
+.rw{margin-bottom:10px}
+.rw select,.rw input{width:100%;height:50px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);padding:0 12px;font-size:17px;color:var(--tx)}
+.rw input{text-align:center}
+.ok{width:100%;height:50px;border-radius:12px;border:0;background:var(--ac);color:#fff;font-weight:700;margin-top:4px}
+textarea{width:100%;height:160px;background:var(--bg);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:8px;font:12px monospace}
+.note{color:var(--mu);font-size:12px;margin:6px 0 0}
+</style>
+</head>
+<body>
+<header>
+  <button id="pm" aria-label="Mois précédent">‹</button>
+  <div><span id="mt"></span><small>Activités périscolaires</small></div>
+  <button id="nm" aria-label="Mois suivant">›</button>
+</header>
+<div class="list" id="list"></div>
+
+<div class="bar">
+  <div class="tot"><span>Total du mois</span><b id="tot">0 h</b></div>
+  <div class="btns"><button class="p" id="pdfb">PDF</button><button id="more">Plus…</button></div>
+</div>
+
+<div class="sheet" id="sh"><div class="pn" id="pn"></div></div>
+<div class="sheet" id="sh2"><div class="pn" id="pn2"></div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+const P=["Matin","Midi","Soir","Mercredi","Vacances","Réunion"];
+const PRE=[["1,50","2","2,50"],["1,50","2","2,50"],["2","2,50","3"],["1","1,50","10"],["10"],["1,50","2"]];
+const JS=["dim","lun","mar","mer","jeu","ven","sam"];
+const $=i=>document.getElementById(i);
+const num=s=>{const n=parseFloat(String(s).replace(",",".").replace(/[^0-9.]/g,""));return isNaN(n)?0:n};
+const fmt=n=>(Math.round(n*100)/100).toString().replace(".",",");
+let y,m,data={},cur=1;
+const key=()=>y+"-"+String(m).padStart(2,"0");
+const dim=()=>new Date(y,m,0).getDate();
+const dow=d=>new Date(y,m-1,d).getDay();
+const total=d=>P.reduce((s,_,i)=>s+num((data[d]||{})[i]),0);
+function load(){try{const r=localStorage.getItem("vacations:"+key());data=r?JSON.parse(r):{}}catch(e){data={}}}
+function save(){try{localStorage.setItem("vacations:"+key(),JSON.stringify(data));localStorage.setItem("vacations:last",key())}catch(e){}}
+function render(){
+  $("mt").textContent=new Date(y,m-1,1).toLocaleDateString("fr-FR",{month:"long",year:"numeric"});
+  const t=new Date(),isT=t.getFullYear()==y&&t.getMonth()+1==m;let h="",s=0;
+  for(let d=1;d<=dim();d++){
+    const w=dow(d),dd=data[d]||{},tt=total(d);s+=tt;
+    const chips=P.map((p,i)=>dd[i]?`<span>${p.slice(0,3)}. ${dd[i]}</span>`:"").join("");
+    h+=`<button class="day${w%6==0?" we":""}${isT&&t.getDate()==d?" today":""}" data-d="${d}"><div class="dn">${String(d).padStart(2,"0")}<small>${JS[w]}</small></div><div class="ch">${chips}</div><div class="dt">${tt?fmt(tt):""}</div></button>`;
+  }
+  $("list").innerHTML=h;$("tot").textContent=fmt(s)+" h";
+}
+function setMonth(ny,nm){y=ny;m=nm;if(m<1){m=12;y--}if(m>12){m=1;y++}load();render();window.scrollTo(0,0)}
+$("pm").onclick=()=>setMonth(y,m-1);$("nm").onclick=()=>setMonth(y,m+1);
+function syncSel(){
+  const sel=[...$("pn").querySelectorAll(".ps")],used=sel.map(x=>x.value).filter(Boolean);
+  sel.forEach(x=>[...x.options].forEach(o=>{o.disabled=o.value!==""&&o.value!==x.value&&used.includes(o.value)}));
+}
+function openDay(d){
+  cur=d;const dd=data[d]||{},ent=Object.keys(dd).map(Number).sort((a,b)=>a-b),n=Math.max(3,ent.length);
+  let h=`<div class="ph"><button id="pd">‹</button><b>${JS[dow(d)]} ${d} ${new Date(y,m-1,1).toLocaleDateString("fr-FR",{month:"long"})}</b><button id="nd">›</button></div>
+  <div class="rh"><span>Période</span><span>Nombre d'heures</span></div>`;
+  for(let k=0;k<n;k++){
+    const p=ent[k],v=p!==undefined?dd[p]:"";
+    h+=`<div class="rw"><select class="ps"><option value="">Choisir…</option>${P.map((q,i)=>`<option value="${i}"${p===i?" selected":""}>${q}</option>`).join("")}</select><input class="hv" list="hl" inputmode="decimal" placeholder="Heures" value="${v}"></div>`;
+  }
+  h+=`<datalist id="hl">${Array.from({length:19},(_,i)=>`<option value="${fmt(1+i*0.5)}">`).join("")}</datalist>
+  <p class="note">3 périodes maximum par jour. Choisis une durée dans la liste (1 à 10 h) ou tape ta propre valeur. Pour retirer une période, remets « Choisir… ».</p>
+  <button class="ok" id="ok">Enregistrer</button>`;
+  $("pn").innerHTML=h;syncSel();$("sh").classList.add("on");
+}
+function commit(){
+  const dd={};$("pn").querySelectorAll(".rw").forEach(r=>{
+    const p=r.querySelector(".ps").value,v=r.querySelector(".hv").value.trim();
+    if(p!==""&&num(v)>0)dd[p]=v});
+  if(Object.keys(dd).length)data[cur]=dd;else delete data[cur];save();render();
+}
+$("list").onclick=e=>{const b=e.target.closest(".day");if(b)openDay(+b.dataset.d)};
+$("pn").onclick=e=>{
+  const b=e.target.closest("button");if(!b)return;
+  if(b.id=="ok"){commit();$("sh").classList.remove("on")}
+  if(b.id=="pd"&&cur>1){commit();openDay(cur-1)}
+  if(b.id=="nd"&&cur<dim()){commit();openDay(cur+1)}
+};
+$("pn").addEventListener("change",e=>{if(e.target.classList.contains("ps"))syncSel()});
+$("sh").onclick=e=>{if(e.target.id=="sh"){commit();$("sh").classList.remove("on")}};
+
+function allData(){const o={};try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith("vacations:20"))o[k.slice(10)]=JSON.parse(localStorage.getItem(k))}}catch(e){}return o}
+function saveBlob(name,data,type){
+  const u=URL.createObjectURL(new Blob([data],{type}));
+  const a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(u),5000);
+}
+function dl(name,txt){try{saveBlob(name,txt,"application/json")}catch(e){showText(txt)}}
+function showText(txt){
+  $("pn2").innerHTML=`<div class="ph"><b>Copier le texte</b><button id="c2">✕</button></div><textarea id="ta" readonly></textarea><p class="note">Sélectionne tout et copie, puis colle dans une note ou un mail.</p>`;
+  $("ta").value=txt.replace("\ufeff","");$("sh2").classList.add("on");
+}
+
+function makePdf(name){
+  const J=window.jspdf;if(!J)return null;
+  const doc=new J.jsPDF({unit:"mm",format:"a4"});
+  const L=15,W=180,T=56,H=9,RH=5.9,CW=[18,22,22,22,22,22,22,30];
+  const X=[L];CW.forEach((w,i)=>X.push(X[i]+w));
+  const mid=(i)=>(X[i]+X[i+1])/2;
+  doc.setTextColor(200);doc.setFont("helvetica","bold");doc.setFontSize(18);
+  doc.text("V I L L E   D E   N O I S I E L",105,15,{align:"center"});
+  doc.setTextColor(0);doc.setFont("helvetica","normal");doc.setFontSize(10);
+  doc.text("Direction des ressources Humaines",L,23);
+  doc.setLineWidth(.6);doc.rect(L,25,W,17);doc.setLineWidth(.2);doc.rect(L+.8,25.8,W-1.6,15.4);
+  doc.setFont("helvetica","bold");doc.setFontSize(12);doc.text("ÉTAT DE VACATIONS",105,32,{align:"center"});
+  let ml=new Date(y,m-1,1).toLocaleDateString("fr-FR",{month:"long",year:"numeric"});ml=ml.charAt(0).toUpperCase()+ml.slice(1);
+  doc.setFont("helvetica","normal");doc.setFontSize(10);doc.text("MOIS DE : "+ml,105,38.5,{align:"center"});
+  doc.text("NOM ET PRÉNOM : "+(name||""),L,49);
+  doc.text("SERVICE : Activités Périscolaires",118,48);doc.text("FONCTION : Animateur horaire",118,53);
+  doc.setLineWidth(.3);
+  const heads=["DATE",...P.map(p=>p.toUpperCase()),null];
+  doc.setFont("helvetica","bold");doc.setFontSize(8);
+  heads.forEach((t,i)=>{doc.rect(X[i],T,CW[i],H);
+    if(t)doc.text(t,mid(i),T+H/2+1.2,{align:"center"});
+    else{doc.text("NB TOTAL",mid(i),T+3.8,{align:"center"});doc.text("D'HEURES",mid(i),T+7,{align:"center"})}});
+  const n=dim();let sum=0;
+  for(let d=1;d<=31;d++){
+    const yy=T+H+(d-1)*RH,ym=yy+RH/2+1.3;
+    for(let i=0;i<8;i++)doc.rect(X[i],yy,CW[i],RH);
+    doc.setFont("helvetica","bold");doc.setFontSize(9);
+    if(d>n){doc.text(String(d).padStart(2,"0"),mid(0),ym,{align:"center"});continue}
+    const t=total(d),w=dow(d);sum+=t;
+    doc.text(String(d).padStart(2,"0"),mid(0),ym,{align:"center"});
+    doc.setFont("helvetica","normal");
+    P.forEach((_,i)=>{const v=(data[d]||{})[i];if(v&&num(v)>0)doc.text(fmt(num(v)),mid(i+1),ym,{align:"center"})});
+    if(t){doc.setFont("helvetica","bold");doc.text(fmt(t),mid(7),ym,{align:"center"})}
+  }
+  const yt=T+H+31*RH;
+  doc.rect(X[0],yt,W-CW[7],RH+.6);doc.rect(X[7],yt,CW[7],RH+.6);
+  doc.setFont("helvetica","bold");doc.setFontSize(9);
+  doc.text("TOTAL GÉNÉRAL",X[7]-3,yt+RH/2+1.6,{align:"right"});
+  doc.text(fmt(sum),mid(7),yt+RH/2+1.6,{align:"center"});
+  const ys=yt+RH+9;
+  doc.setFont("helvetica","normal");doc.setFontSize(10);
+  doc.text("L'agent",L+2,ys);doc.text("date et signature",L+2,ys+4.5);
+  doc.text("Le Responsable de la structure",105,ys);doc.text("date et signature",105,ys+4.5);
+  doc.setFontSize(8);doc.setTextColor(90);
+  doc.text("Hôtel-de-Ville · Place Emile-Menier BP 35 · 77426 Marne-la-Vallée cedex 2",105,285,{align:"center"});
+  doc.text("Tél. 01 60 37 73 73 / Fax. 01 60 37 74 49 · www.ville-noisiel.fr",105,289,{align:"center"});
+  return doc.output("arraybuffer");
+}
+function dlBin(name,buf){try{saveBlob(name,buf,"application/pdf");$("sh2").classList.remove("on")}catch(e){alert("Export impossible.")}}
+$("pdfb").onclick=()=>{
+  let nm="";try{nm=localStorage.getItem("vacations:name")||""}catch(e){}
+  $("pn2").innerHTML=`<div class="ph"><b>Exporter en PDF</b><button id="c2">✕</button></div>
+  <div class="pr" style="grid-template-columns:1fr"><label>Nom et prénom (affiché sur la feuille)</label><input id="nm2" style="text-align:left" value="${nm.replace(/"/g,"&quot;")}" placeholder="Nom Prénom"></div>
+  <button class="ok" id="gen">Générer le PDF du mois</button><p class="note">Mise en page identique à la feuille « État de vacations ».</p>`;
+  $("sh2").classList.add("on");
+};
+
+$("more").onclick=()=>{
+  $("pn2").innerHTML=`<div class="ph"><b>Plus d'options</b><button id="c2">✕</button></div>
+  <div class="btns" style="flex-direction:column"><button id="b2">Sauvegarder mes données (fichier)</button><button id="b3">Restaurer une sauvegarde</button><button id="b4">Vider ce mois</button></div>
+  <input type="file" id="fi" accept=".json,application/json" hidden><p class="note">Les données restent sur ce téléphone, dans ce navigateur. Fais une sauvegarde de temps en temps.</p>`;
+  $("sh2").classList.add("on");
+};
+$("sh2").onclick=e=>{
+  const id=e.target.id;
+  if(id=="sh2"||id=="c2"){$("sh2").classList.remove("on")}
+  if(id=="gen"){const nm=$("nm2").value.trim();try{localStorage.setItem("vacations:name",nm)}catch(x){}
+    const b=makePdf(nm);if(!b){alert("Le module PDF n'est pas encore chargé. Connecte-toi à internet une fois, recharge l'application, puis réessaie.");return}
+    dlBin("etat-de-vacations-"+key()+".pdf",b)}
+  if(id=="b2"){$("sh2").classList.remove("on");dl("sauvegarde-heures.json",JSON.stringify(allData()))}
+  if(id=="b3")$("fi").click();
+  if(id=="b4"&&confirm("Effacer toutes les heures de ce mois ?")){data={};save();render();$("sh2").classList.remove("on")}
+};
+$("sh2").addEventListener("change",e=>{
+  if(e.target.id!="fi"||!e.target.files[0])return;
+  const r=new FileReader();r.onload=()=>{try{const o0=JSON.parse(r.result),o=o0.months||o0;for(const k in o)localStorage.setItem("vacations:"+k,JSON.stringify(o[k]));load();render();$("sh2").classList.remove("on");alert("Sauvegarde restaurée.")}catch(x){alert("Fichier invalide.")}};
+  r.readAsText(e.target.files[0]);
+});
+if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+(function(){
+  let k="";try{k=localStorage.getItem("vacations:last")||""}catch(e){}
+  const t=new Date();
+  if(/^\d{4}-\d{2}$/.test(k)){y=+k.slice(0,4);m=+k.slice(5)}else{y=t.getFullYear();m=t.getMonth()+1}
+  load();render();
+})();
+</script>
+</body>
+</html>
